@@ -1,0 +1,4 @@
+ruby=ruby-2.3.1
+ruby-gemset=ansible-role-environment_variables
+#ruby-gem-install=bundler rake
+#ruby-bundle-install=true

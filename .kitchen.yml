@@ -1,0 +1,26 @@
+---
+driver:
+  name: vagrant
+  box_check_update: false
+  customize:
+    memory: 1024
+
+provisioner:
+  name: ansible_playbook
+  require_ansible_repo: true
+  ansible_verbose: true
+  require_chef_for_busser: false
+  hosts: 'localhost'
+
+platforms:
+  - name: ubuntu-14.04
+    driver:
+      box: kitchen/ansible-role-environment_variables/ubuntu-14.04
+      box_url: <%= File.expand_path('../vagrant_box/trusty-server-cloudimg-amd64-vagrant-disk1.box', __FILE__) %>
+    provisioner:
+
+
+suites:
+  - name: default
+    run_list:
+    attributes:

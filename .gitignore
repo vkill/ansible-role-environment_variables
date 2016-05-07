@@ -1,0 +1,23 @@
+
+# Ignore bundler config.
+/.bundle
+
+# Ignore ruby version manage file
+/.ruby-version
+/.ruby-gemset
+/.rvmrc
+/.versions.conf
+
+#
+/Gemfile.lock
+
+#
+.DS_Store
+
+#
+/vagrant_box/*.box
+!/vagrant_box/.keep
+
+#
+/.kitchen/
+/.kitchen.local.yml
