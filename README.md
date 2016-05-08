@@ -49,6 +49,8 @@ $ kitchen test
 
 # for development
 
+$ kitchen destroy ubuntu
+
 $ kitchen converge ubuntu
 
 $ kitchen verify ubuntu
