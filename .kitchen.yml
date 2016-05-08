@@ -10,6 +10,8 @@ provisioner:
   require_ansible_repo: true
   ansible_verbose: true
   require_chef_for_busser: false
+  require_ruby_for_busser: false
+  requirements_path: ansible_galaxy_requirements.yml
   hosts: 'localhost'
 
 platforms:
@@ -19,8 +21,9 @@ platforms:
       box_url: <%= File.expand_path('../vagrant_box/trusty-server-cloudimg-amd64-vagrant-disk1.box', __FILE__) %>
     provisioner:
 
-
 suites:
   - name: default
     run_list:
     attributes:
+    busser:
+      ruby_bindir: /usr/local/bin

@@ -1,2 +1,109 @@
 ---
 
+######
+- name: Set global pam env data
+  lineinfile:
+    dest:   "{{ env_global_pam_file }}"
+    regexp: "^{{ item }}="
+    line:   "{{ item }}={{ env_global_pam_data[item] }}"
+  with_items: "{{ env_global_pam_data }}"
+
+######
+- name: Touch user pam env file
+  file:
+    path: "~/{{ env_user_pam_filename }}"
+    state: "touch"
+    mode: 0700
+  become: yes
+  become_user: "{{ env_user_username }}"
+
+- name: Set user pam env data
+  lineinfile:
+    dest:   "{{ env_user_pam_filename }}"
+    regexp: "^{{ item }}="
+    line:   "{{ item }}={{ env_user_pam_data[item] }}"
+  with_items: "{{ env_user_pam_data }}"
+  become: yes
+  become_user: "{{ env_user_username }}"
+
+######
+- name: Touch global login_shell env file
+  file:
+    path: "{{ env_global_login_shell_file }}"
+    state: "touch"
+    mode: 0755
+
+- name: Set global login_shell env data
+  lineinfile:
+    dest:   "{{ env_global_login_shell_file }}"
+    regexp: "^{{ item }}="
+    line:   "{{ item }}={{ env_global_login_shell_data[item] }}"
+    state:  "present"
+  with_items: "{{ env_global_login_shell_data }}"
+
+- name: Remove export item from global login_shell env data
+  lineinfile:
+    dest:   "{{ env_global_login_shell_file }}"
+    regexp: "^export {{ item }}"
+    state:  "absent"
+  with_items: "{{ env_global_login_shell_data }}"
+
+- name: Add export item to global login_shell env data
+  lineinfile:
+    dest:   "{{ env_global_login_shell_file }}"
+    insertafter: "^{{ item }}="
+    line: "export {{ item }}"
+    state:  "present"
+  with_items: "{{ env_global_login_shell_data }}"
+
+- name: Source global login_shell env file
+  shell: ". {{ env_global_login_shell_file }}"
+  become: yes
+  become_user: "{{ env_user_username }}"
+  when: env_global_login_shell_source_enable
+
+######
+- name: Touch user login_shell env file
+  file:
+    path: "~/{{ env_user_login_shell_filename }}"
+    state: "touch"
+    mode: 0700
+  become: yes
+  become_user: "{{ env_user_username }}"
+
+- name: Set user login_shell env data
+  lineinfile:
+    dest:   "~/{{ env_user_login_shell_filename }}"
+    regexp: "^{{ item }}="
+    line:   "{{ item }}={{ env_user_login_shell_data[item] }}"
+    state:  "present"
+  with_items: "{{ env_user_login_shell_data }}"
+  become: yes
+  become_user: "{{ env_user_username }}"
+
+- name: Remove export item from global login_shell env data
+  lineinfile:
+    dest:   "~/{{ env_user_login_shell_filename }}"
+    regexp: "^export {{ item }}"
+    state:  "absent"
+  with_items: "{{ env_user_login_shell_data }}"
+  become: yes
+  become_user: "{{ env_user_username }}"
+
+- name: Add export item to global login_shell env data
+  lineinfile:
+    dest:   "~/{{ env_user_login_shell_filename }}"
+    insertafter: "^{{ item }}="
+    line: "export {{ item }}"
+    state:  "present"
+  with_items: "{{ env_user_login_shell_data }}"
+  become: yes
+  become_user: "{{ env_user_username }}"
+
+- name: Source user login_shell env file
+  shell: ". ~/{{ env_user_login_shell_filename }}"
+  args:
+    chdir: "~"
+  become: yes
+  become_user: "{{ env_user_username }}"
+  when: env_user_login_shell_source_enable

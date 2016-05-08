@@ -2,4 +2,38 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - ansible-role-environment_variables
+    - role: ansible-role-environment_variables
+      env_user_username: 'vagrant'
+      env_global_pam_data:
+        FOO_ONE: BAR_ONE
+      env_global_login_shell_data:
+        FOO_TWO: BAR_TWO
+      env_user_pam_data:
+        FOO_THREE: BAR_THREE
+      env_user_login_shell_data:
+        FOO_FOUR: BAR_FOUR
+
+    - role: vkill.ruby
+      tags: ruby
+      ruby_install_from_source: True
+      ruby_version: 2.2.2
+      ruby_download_url: http://cache.ruby-lang.org/pub/ruby/ruby-2.2.2.tar.gz
+      ruby_install_bundler: False
+
+  tasks:
+    - name: 'Replace gem source for root'
+      shell: gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
+      become: yes
+      become_user: "root"
+
+    - name: Install Bundler.
+      gem: name=bundler state=present user_install=no
+
+    - name: 'Replace bundle source'
+      shell: bundle config mirror.https://rubygems.org https://gems.ruby-china.org
+
+    - name: Install configured gems.
+      gem: "name={{ item }} state=present"
+      with_items:
+        - busser
+        - busser-serverspec

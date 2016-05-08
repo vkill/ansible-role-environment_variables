@@ -1,2 +1,19 @@
 ---
 
+env_global_pam_file: "/etc/environment"
+env_global_pam_data: {}
+
+env_global_login_shell_dir: "/etc/profile.d"
+env_global_login_shell_filename: "env_vars_created_by_ansible.sh"
+env_global_login_shell_file: "{{ env_global_login_shell_dir }}/{{ env_global_login_shell_filename }}"
+env_global_login_shell_data: {}
+env_global_login_shell_source_enable: true
+
+env_user_username: "{{ ansible_ssh_user }}"
+
+env_user_pam_filename: ".pam_environment"
+env_user_pam_data: {}
+
+env_user_login_shell_filename: ".profile"
+env_user_login_shell_data: {}
+env_user_login_shell_source_enable: true

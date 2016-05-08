@@ -6,3 +6,5 @@ gem 'kitchen-ansible', '~> 0.42.1'
 
 gem 'rspec', '~> 3.5.0.beta3'
 gem 'serverspec', '~> 2.34.0'
+
+gem 'pry'
