@@ -3,13 +3,17 @@
   remote_user: root
   roles:
     - role: ansible-role-environment_variables
-      env_user_username: 'vagrant'
+      # With /etc/environment
       env_global_pam_data:
         FOO_ONE: BAR_ONE
+      # With /etc/profile.d/env_vars_created_by_ansible.sh
       env_global_login_shell_data:
         FOO_TWO: BAR_TWO
+      env_user_username: 'vagrant'
+      # With /home/vagrant/.pam_environment
       env_user_pam_data:
         FOO_THREE: BAR_THREE
+      # With /home/vagrant/.profile
       env_user_login_shell_data:
         FOO_FOUR: BAR_FOUR
 
@@ -21,19 +25,7 @@
       ruby_install_bundler: False
 
   tasks:
-    - name: 'Replace gem source for root'
+    - name: 'Replace gem source for vagrant'
       shell: gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
       become: yes
-      become_user: "root"
-
-    - name: Install Bundler.
-      gem: name=bundler state=present user_install=no
-
-    - name: 'Replace bundle source'
-      shell: bundle config mirror.https://rubygems.org https://gems.ruby-china.org
-
-    - name: Install configured gems.
-      gem: "name={{ item }} state=present"
-      with_items:
-        - busser
-        - busser-serverspec
+      become_user: "vagrant"

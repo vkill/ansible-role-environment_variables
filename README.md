@@ -28,7 +28,20 @@ Example Playbook
 ```yaml
 - hosts: servers
   roles:
-     - role: vkill.environment_variables
+    - role: vkill.environment_variables
+      # With /etc/environment
+      env_global_pam_data:
+        FOO_ONE: BAR_ONE
+      # With /etc/profile.d/env_vars_created_by_ansible.sh
+      env_global_login_shell_data:
+        FOO_TWO: BAR_TWO
+      env_user_username: 'vagrant'
+      # With /home/vagrant/.pam_environment
+      env_user_pam_data:
+        FOO_THREE: BAR_THREE
+      # With /home/vagrant/.profile
+      env_user_login_shell_data:
+        FOO_FOUR: BAR_FOUR
 ```
 
 Local Testing
