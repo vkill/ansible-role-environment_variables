@@ -19,7 +19,7 @@
 
 - name: Set user pam env data
   lineinfile:
-    dest:   "{{ env_user_pam_filename }}"
+    dest:   "~/{{ env_user_pam_filename }}"
     regexp: "^{{ item }}="
     line:   "{{ item }}={{ env_user_pam_data[item] }}"
   with_items: "{{ env_user_pam_data }}"
